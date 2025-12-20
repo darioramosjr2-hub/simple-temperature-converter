@@ -19,7 +19,7 @@ def c_to_k(c: float) -> float:
 
 
 def f_to_c(f: float) -> float:
-    return (f - 32.0) * 5.0 / 9.0 + 100
+    return (f - 32.0) * 5.0 / 9.0
 
 
 def k_to_c(k: float) -> float:
