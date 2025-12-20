@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main ]
 
@@ -18,7 +18,23 @@ jobs:
           python-version: '3.13'
 
       - name: Install dependencies
-        run: python -m pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          cat requirements.txt
+          python -m pip install -r requirements.txt
+          python -m pip freeze
+
+      - name: Verify httpx import
+        run: |
+          python - <<'PY'
+          try:
+              import httpx
+              print('httpx', httpx.__version__)
+          except Exception as e:
+              print('httpx import failed:', e)
+              import sys
+              sys.exit(1)
+          PY
 
       - name: Run tests
         run: pytest -q
