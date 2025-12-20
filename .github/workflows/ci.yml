@@ -18,15 +18,18 @@ jobs:
           python-version: '3.13'
 
       - name: Install dependencies
-        working-directory: ./simple-temperature-converter
         run: |
           python -m pip install --upgrade pip
-          cat requirements.txt
-          python -m pip install -r requirements.txt
+          if [ -f ./simple-temperature-converter/requirements.txt ]; then
+            cat ./simple-temperature-converter/requirements.txt
+            python -m pip install -r ./simple-temperature-converter/requirements.txt
+          else
+            cat requirements.txt
+            python -m pip install -r requirements.txt
+          fi
           python -m pip freeze
 
       - name: Verify httpx import
-        working-directory: ./simple-temperature-converter
         run: |
           python - <<'PY'
           try:
@@ -39,8 +42,12 @@ jobs:
           PY
 
       - name: Run tests
-        working-directory: ./simple-temperature-converter
-        run: pytest -q
+        run: |
+          if [ -d ./simple-temperature-converter ]; then
+            python -m pytest ./simple-temperature-converter -q
+          else
+            python -m pytest -q
+          fi
 
   docker-build:
     needs: test
@@ -49,4 +56,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build Docker Image
         run: |
-          docker build -t simple-temperature-converter:latest ./simple-temperature-converter
+          if [ -d ./simple-temperature-converter ]; then
+            docker build -t simple-temperature-converter:latest ./simple-temperature-converter
+          else
+            docker build -t simple-temperature-converter:latest .
+          fi
