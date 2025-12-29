@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      kafka:
+        image: apache/kafka:latest
+        ports:
+          - 9092:9092
 
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +47,9 @@ jobs:
           PY
 
       - name: Run tests
+        env: 
+          KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+          DB_HOST: localhost
         run: |
           if [ -d ./simple-temperature-converter ]; then
             python -m pytest ./simple-temperature-converter -q
