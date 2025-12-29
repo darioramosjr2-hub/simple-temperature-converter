@@ -18,15 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # --- ADD THIS DIAGNOSTIC STEP ---
-      - name: List files to verify path
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Listing all files:"
-          ls -R
-      # --------------------------------
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -83,7 +74,7 @@ jobs:
         uses: docker/build-push-action@v5
         with: 
           # This tells Docker where your code is
-          context: ./simple-temperature-converter
+          context: .
           push: true
           # Replace 'your-username' with your actual Docker Hub username
           tags: ${{ secrets.DOCKER_USERNAME }}/temp-api:latest
@@ -91,7 +82,7 @@ jobs:
       - name: Build & Push Consumer image
         uses: docker/build-push-action@v5
         with: 
-          context: ./simple-temperature-converter
+          context: .
           push: true
           # Replace 'your-username' with your actual Docker Hub username
           tags: ${{ secrets.DOCKER_USERNAME }}/temp-consumer:latest
