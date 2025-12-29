@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v5
         with: 
           # This tells Docker where your code is
-          context: ${{ github.workspace }}/simple-temperature-converter
+          context: ./simple-temperature-converter
           push: true
           # Replace 'your-username' with your actual Docker Hub username
           tags: ${{ secrets.DOCKER_USERNAME }}/temp-api:latest
@@ -81,7 +81,7 @@ jobs:
       - name: Build & Push Consumer image
         uses: docker/build-push-action@v5
         with: 
-          context: ${{ github.workspace }}/simple-temperature-converter
+          context: ./simple-temperature-converter
           push: true
           # Replace 'your-username' with your actual Docker Hub username
           tags: ${{ secrets.DOCKER_USERNAME }}/temp-consumer:latest
